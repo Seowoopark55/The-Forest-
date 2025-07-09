@@ -1,399 +1,681 @@
-
-<!DOCTYPE html>
-
-<html lang="ko">
-<head>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&amp;display=swap" rel="stylesheet"/>
-<meta charset="utf-8"/>
-<title>The Forest 제작 가이드</title>
-<style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 10px; }
-        h1 { font-size: 28px; }
-        .category { background: #dde4ff; padding: 10px; border-radius: 6px; margin-bottom: 20px; }
-        .item { background: #eaffea; margin: 5px 0; padding: 10px; border-radius: 6px; }
-        .sub-category-block { margin-top: 10px; }
-        .sub-title { font-weight: bold; background: #d8f0ff; padding: 8px; border-radius: 4px; cursor: pointer; }
-        .sub-content { display: none; padding-left: 10px; margin-top: 5px; }
-        .collapsible { cursor: pointer; font-weight: bold; }
-        .content { display: none; margin-top: 5px; }
-        #topBtn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #555;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 100;
-        }
-        #searchBox {
-            width: 80%;
-            padding: 8px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-        #controls {
-            margin-bottom: 20px;
-        }
-        .hidden { display: none !important; }
-    
-.item-description {
-    font-size: 15px;
-    color: #2a2a2a;
-    background: #eef4ff;
-    border-left: 4px solid #6aa6ff;
-    padding: 6px 12px;
-    margin-top: 5px;
-    border-radius: 6px;
-    font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>더 포레스트 제작도감</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
 }
 
-</style>
-<script>
-        function toggle(id) {
-            var el = document.getElementById(id);
-            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
-        }
-        function toggleSubCategory(id) {
-            var sub = document.getElementById(id);
-            sub.style.display = (sub.style.display === 'none') ? 'block' : 'none';
-        }
-        function expandAll() {
-            document.querySelectorAll('.content, .sub-content').forEach(e => e.style.display = 'block');
-        }
-        function collapseAll() {
-            document.querySelectorAll('.content, .sub-content').forEach(e => e.style.display = 'none');
-        }
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        function searchItems() {
-            const keyword = document.getElementById('searchBox').value.toLowerCase();
-            const allItems = document.querySelectorAll('.item');
-            const allContents = document.querySelectorAll('.content, .sub-content');
-            allContents.forEach(e => e.style.display = 'none');
-            allItems.forEach(item => {
-                if (item.textContent.toLowerCase().includes(keyword)) {
-                    item.classList.remove('hidden');
-                    let parent = item.parentElement;
-                    while (parent) {
-                        if (parent.classList.contains('content') || parent.classList.contains('sub-content')) {
-                            parent.style.display = 'block';
-                        }
-                        parent = parent.parentElement;
-                    }
-                } else {
-                    item.classList.add('hidden');
-                }
-            });
-            if (keyword.trim() === '') {
-                allItems.forEach(i => i.classList.remove('hidden'));
-                allContents.forEach(e => e.style.display = 'none');
-            }
-        }
-    </script>
-</head>
-<body>
-<h1>📘 The Forest 제작 가이드</h1>
-<div id="controls">
-<input id="searchBox" oninput="searchItems()" placeholder="아이템 검색..." type="text"/>
-<button onclick="expandAll()">모두 펼치기</button>
-<button onclick="collapseAll()">모두 접기</button>
-</div>
-<div class="category">
-<div class="collapsible" onclick="toggle('heal')">🧪 치유 &amp; 에너지</div>
-<div class="content" id="heal">
-<div class="item">
-<b>에너지 믹스</b><br/>
-<span>🧩 재료: 치커리 + 콘 플라워</span><br/>
-<span>🧪 효과: 에너지 회복</span>
-</div>
-<div class="item">
-<b>에너지 믹스+</b><br/>
-<span>🧩 재료: 치커리 + 콘 플라워 + 알로에</span><br/>
-<span>🧪 효과: 에너지 대량 회복</span>
-</div>
-<div class="item">
-<b>체력 믹스</b><br/>
-<span>🧩 재료: 마리골드 + 알로에</span><br/>
-<span>🧪 효과: 체력 회복</span>
-</div>
-<div class="item">
-<b>체력 믹스+</b><br/>
-<span>🧩 재료: 마리골드 + 알로에 + 콘 플라워</span><br/>
-<span>🧪 효과: 체력 대량 회복</span>
-</div>
-</div>
-</div>
-<div class="category">
-<div class="collapsible" onclick="toggle('armor')">🛡 갑옷 &amp; 의류</div>
-<div class="content" id="armor">
-<div class="item">
-<b>도마뱀 갑옷</b><br/>
-<span>🧩 재료: 도마뱀 껍질</span><br/>
-<span>🧪 효과: 기본 방어력 제공</span>
-</div>
-<div class="item">
-<b>스텔스 갑옷</b><br/>
-<span>🧩 재료: 도마뱀 껍질 + 나뭇잎[15]</span><br/>
-<span>🧪 효과: 은신 능력 향상</span>
-</div>
-<div class="item">
-<b>뼈 갑옷</b><br/>
-<span>🧩 재료: 뼈[6] + 천[3]</span><br/>
-<span>🧪 효과: 방어력 상승</span>
-</div>
-<div class="item">
-<b>워름 갑옷</b><br/>
-<span>🧩 재료: 워름 파츠[15]</span><br/>
-<span>🧪 효과: 방어력 최고치, 돌연변이 처치 후 제작 가능</span>
-</div>
-<div class="item">
-<b>스노우부츠</b><br/>
-<span>🧩 재료: 토끼털[3] + 밧줄[2]</span><br/>
-<span>🧪 효과: 눈 위에서의 이동 속도 향상</span>
-</div>
-</div>
-</div>
-<div class="category">
-<div class="collapsible" onclick="toggle('bag')">🎒 가방</div>
-<div class="content" id="bag">
-<div class="item">
-<b>가죽 물통</b><br/>
-<span>🧩 재료: 사슴 가죽[2] + 밧줄</span><br/>
-<span>🧪 효과: 물 저장 가능</span>
-</div>
-<div class="item">
-<b>돌 가방</b><br/>
-<span>🧩 재료: 멧돼지 가죽 + 천 + 밧줄[3]</span><br/>
-<span>🧪 효과: 돌 소지량 증가</span>
-</div>
-<div class="item">
-<b>막대기 주머니</b><br/>
-<span>🧩 재료: 토끼털 + 밧줄[2] + 천[3]</span><br/>
-<span>🧪 효과: 막대기 소지량 증가</span>
-</div>
-<div class="item">
-<b>주머니</b><br/>
-<span>🧩 재료: 토끼털[2]</span><br/>
-<span>🧪 효과: 베리류 저장 가능</span>
-</div>
-<div class="item">
-<b>창 가방</b><br/>
-<span>🧩 재료: 멧돼지 가죽[2] + 사슴 가죽[2] + 천[2] + 밧줄[3]</span><br/>
-<span>🧪 효과: 창 소지량 증가</span>
-</div>
-<div class="item">
-<b>토끼털 부츠</b><br/>
-<span>🧩 재료: 토끼털[3] + 밧줄[2]</span><br/>
-<span>🧪 효과: 이동 속도 소폭 증가</span>
-</div>
-<div class="item">
-<b>화살통</b><br/>
-<span>🧩 재료: 토끼털[3] + 밧줄</span><br/>
-<span>🧪 효과: 화살 최대 소지량 증가</span>
-</div>
-</div>
-</div>
-<div class="category">
-<div class="collapsible" onclick="toggle('weapon')">⚔️ 무기</div>
-<div class="content" id="weapon">
-<div class="sub-category-block">
-<div class="sub-title" onclick="toggleSubCategory('melee')">▶ 근접 무기</div>
-<div class="sub-content" id="melee">
-<div class="item">
-<b>강화 창</b><br/>
-<span>🧩 재료: 창 + 천[2] + 뼈[3]</span><br/>
-<span>🧪 효과: 공격력 증가</span>
-</div>
-<div class="item">
-<b>강화 막대기</b><br/>
-<span>🧩 재료: 막대기 + 천</span><br/>
-<span>🧪 효과: 불 붙이기 가능</span>
-</div>
-<div class="item">
-<b>강화 돌멩이</b><br/>
-<span>🧩 재료: 돌 + 천</span><br/>
-<span>🧪 효과: 불 붙이기 가능</span>
-</div>
-<div class="item">
-<b>카타나</b><br/>
-<span>🧩 재료: 협곡 동굴에서 획득</span><br/>
-<span>🧪 효과: 빠른 공격 속도, 방어 불가</span>
-</div>
-<div class="item">
-<b>몽둥이</b><br/>
-<span>🧩 재료: 식인종 시체 또는 동굴</span><br/>
-<span>🧪 효과: 공격력 높고 저지력 강함</span>
-</div>
-<div class="item">
-<b>제작 몽둥이</b><br/>
-<span>🧩 재료: 해골 + 막대기</span><br/>
-<span>🧪 효과: 중간 성능, 장식 가능</span>
-</div>
-<div class="item">
-<b>수리 도구</b><br/>
-<span>🧩 재료: 막대기[2] + 돌 + 수액[10] + 천[2]</span><br/>
-<span>🧪 효과: 건물 수리, 자원 수확</span>
-</div>
-<div class="item">
-<b>테니스 라켓</b><br/>
-<span>🧩 재료: 협곡 동굴 또는 식인종 드랍</span><br/>
-<span>🧪 효과: 공격력 낮음, 장난감 용도</span>
-</div>
-<div class="item">
-<b>헤어스프레이</b><br/>
-<span>🧩 재료: 가방, 캐리어 등에서 획득</span><br/>
-<span>🧪 효과: 화염 공격 가능, 연료 소진 시 폐기</span>
-</div>
-<div class="item">
-<b>티미의 장난감</b><br/>
-<span>🧩 재료: 장난감 부품[6]</span><br/>
-<span>🧪 효과: 공격력 없음, 수집용</span>
-</div>
-</div>
-</div>
-<div class="sub-category-block">
-<div class="sub-title" onclick="toggleSubCategory('ranged')">▶ 원거리 무기</div>
-<div class="sub-content" id="ranged">
-<div class="item">
-<b>제작 활</b><br/>
-<span>🧩 재료: 막대기 + 천 + 밧줄</span><br/>
-<span>🧪 효과: 기본 활, 화살 발사 가능</span>
-</div>
-<div class="item">
-<b>현대 활</b><br/>
-<span>🧩 재료: 협곡 동굴</span><br/>
-<span>🧪 효과: 높은 정확도, 공격력 강력</span>
-</div>
-<div class="item">
-<b>플린트락 권총</b><br/>
-<span>🧩 재료: 권총 부품[8] + 폭발물로 확보</span><br/>
-<span>🧪 효과: 공격력 높지만 재장전 느림</span>
-</div>
-<div class="item">
-<b>조명탄 권총</b><br/>
-<span>🧩 재료: 비행기 잔해</span><br/>
-<span>🧪 효과: 적중 시 화염 발생</span>
-</div>
-<div class="item">
-<b>석궁</b><br/>
-<span>🧩 재료: 해저 동굴</span><br/>
-<span>🧪 효과: 공격력 최상, 탄환 수거 가능</span>
-</div>
-<div class="item">
-<b>새총</b><br/>
-<span>🧩 재료: 막대기 + 천 + 절연 테이프</span><br/>
-<span>🧪 효과: 작은 돌 투사</span>
-</div>
-</div>
-</div>
-<div class="sub-category-block">
-<div class="sub-title" onclick="toggleSubCategory('arrows')">▶ 화살</div>
-<div class="sub-content" id="arrows">
-<div class="item">
-<b>화살 [x5]</b><br/>
-<span>🧩 재료: 막대기 + 깃털[5]</span><br/>
-<span>🧪 효과: 기본 투사체</span>
-</div>
-<div class="item">
-<b>뼈 화살 [x5]</b><br/>
-<span>🧩 재료: 막대기 + 깃털[5] + 뼈[5]</span><br/>
-<span>🧪 효과: 데미지 증가</span>
-</div>
-<div class="item">
-<b>불화살 [x5]</b><br/>
-<span>🧩 재료: 화살[5] + 천 + 술</span><br/>
-<span>🧪 효과: 적중 시 화염 피해</span>
-</div>
-<div class="item">
-<b>독화살 [x5]</b><br/>
-<span>🧩 재료: 화살[5] + 트윈베리 or 스노우베리[4] + 광대버섯 or 화경버섯</span><br/>
-<span>🧪 효과: 적을 중독시킴</span>
-</div>
-</div>
-</div>
-<div class="sub-category-block">
-<div class="sub-title" onclick="toggleSubCategory('throwing')">▶ 투척 무기</div>
-<div class="sub-content" id="throwing">
-<div class="item">
-<b>화염병</b><br/>
-<span>🧩 재료: 천 + 술</span><br/>
-<span>🧪 효과: 착탄 시 화염 발생</span>
-</div>
-<div class="item">
-<b>다이너마이트</b><br/>
-<span>🧩 재료: 가방 등에서 획득</span><br/>
-<span>🧪 효과: 광역 폭발, 나무 벌목 가능</span>
-</div>
-<div class="item">
-<b>폭발물</b><br/>
-<span>🧩 재료: 절연테이프 + 손목시계 + 술 + 동전 + 회로판</span><br/>
-<span>🧪 효과: 돌연변이에 강함</span>
-</div>
-<div class="item">
-<b>점착 폭발물</b><br/>
-<span>🧩 재료: 폭발물 + 수액</span><br/>
-<span>🧪 효과: 표면에 달라붙음</span>
-</div>
-<div class="item">
-<b>머리 폭탄</b><br/>
-<span>🧩 재료: 폭발물 + 머리</span><br/>
-<span>🧪 효과: 단일 고폭탄</span>
-</div>
-<div class="item">
-<b>테니스공</b><br/>
-<span>🧩 재료: 맵 전체에서 획득</span><br/>
-<span>🧪 효과: 주의 돌리기용, 화염 가능</span>
-</div>
-<div class="item">
-<b>작은 돌</b><br/>
-<span>🧩 재료: 맵 전체에서 획득</span><br/>
-<span>🧪 효과: 새총 탄환 또는 던지기</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="category">
-<div class="collapsible" onclick="toggle('upgrade')">⚙️ 업그레이드</div>
-<div class="content" id="upgrade">
-<div class="item">
-<b>+속도 무기</b><br/>
-<span>🧩 재료: 무기 + 수액 + 깃털</span><br/>
-<span>🧪 효과: 공격 속도 증가, 데미지 소폭 하락</span>
-</div>
-<div class="item">
-<b>+데미지 무기</b><br/>
-<span>🧩 재료: 무기 + 수액 + 술</span><br/>
-<span>🧪 효과: 공격력 증가, 속도 하락</span>
-</div>
-<div class="item">
-<b>+데미지 -속도 무기</b><br/>
-<span>🧩 재료: 무기 + 수액 + 이빨</span><br/>
-<span>🧪 효과: 공격력 증가, 공격 속도 하락</span>
-</div>
-<div class="item">
-<b>독 무기</b><br/>
-<span>🧩 재료: 무기 + 스노우베리 or 트윈베리[4] or 독버섯</span><br/>
-<span>🧪 효과: 적을 중독시킴</span>
-</div>
-<div class="item">
-<b>불 붙는 무기</b><br/>
-<span>🧩 재료: 무기 + 천</span><br/>
-<span>🧪 효과: 불 가능, 추위 해소</span>
-</div>
-<div class="item">
-<b>조명 부착</b><br/>
-<span>🧩 재료: 무기 + 손전등 + 절연 테이프</span><br/>
-<span>🧪 효과: 야간 시야 확보</span>
-</div>
-</div>
-</div><div class="category"><div class="collapsible" onclick="toggle('기본 구조물')">🏠 건축물 - 기본 구조물</div><div class="content" id="기본 구조물"><div class="item"><b>통나무 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 기본적인 방어용 벽.</span></div><div class="item"><b>문 달린 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 출입이 가능한 문이 달린 벽.</span></div><div class="item"><b>창문 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 외부 확인이나 공격용 창이 있는 벽.</span></div><div class="item"><b>바닥</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 건축물의 기반이 되는 바닥.</span></div><div class="item"><b>지붕</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 집 형태를 마무리하는 지붕.</span></div><div class="item"><b>사다리</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 상층 구조로 올라갈 수 있는 구조물.</span></div><div class="item"><b>플랫폼</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 나무 위나 고지대 건축 시 사용.</span></div></div></div><div class="category"><div class="collapsible" onclick="toggle('쉼터')">🏠 건축물 - 쉼터</div><div class="content" id="쉼터"><div class="item"><b>땅 위 쉼터</b><br/><span>🧩 재료: 막대기 + 잎</span><br/><span>🧪 설명: 기초적인 휴식 및 저장 가능 쉼터.</span></div><div class="item"><b>통나무 쉼터</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 튼튼한 나무 기반 쉼터.</span></div><div class="item"><b>나무 위 집</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 나무 위 안전 거처.</span></div><div class="item"><b>고급 나무 위 집</b><br/><span>🧩 재료: 통나무 + 밧줄</span><br/><span>🧪 설명: 사다리와 창문이 있는 고급형.</span></div><div class="item"><b>절벽 집</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 절벽 가장자리에 설치되는 집.</span></div><div class="item"><b>해안가 집</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 물 위에 떠 있는 집.</span></div></div></div><div class="category"><div class="collapsible" onclick="toggle('보관/생활')">🏠 건축물 - 보관/생활</div><div class="content" id="보관/생활"><div class="item"><b>보관대</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 기초 아이템 보관대.</span></div><div class="item"><b>무기 보관대</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 무기를 정렬해 보관 가능.</span></div><div class="item"><b>식량 저장소</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 육류 등 음식 저장.</span></div><div class="item"><b>물 저장소</b><br/><span>🧩 재료: 거북이 등껍질 + 막대기</span><br/><span>🧪 설명: 빗물 채집 및 식수 확보.</span></div><div class="item"><b>침대</b><br/><span>🧩 재료: 막대기 + 천</span><br/><span>🧪 설명: 수면 및 저장 가능 침구.</span></div><div class="item"><b>벽난로</b><br/><span>🧩 재료: 돌</span><br/><span>🧪 설명: 난방과 조명 역할을 겸함.</span></div><div class="item"><b>벽걸이 횃불</b><br/><span>🧩 재료: 막대기 + 천</span><br/><span>🧪 설명: 벽면에 설치하는 조명.</span></div></div></div><div class="category"><div class="collapsible" onclick="toggle('함정/방어')">🏠 건축물 - 함정/방어</div><div class="content" id="함정/방어"><div class="item"><b>방어용 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 두터운 방어 구조물.</span></div><div class="item"><b>방어용 문</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 폐쇄가 가능한 방어용 입구.</span></div><div class="item"><b>돌 트랩</b><br/><span>🧩 재료: 돌 + 막대기 + 밧줄</span><br/><span>🧪 설명: 지나는 적에게 피해.</span></div><div class="item"><b>밧줄 덫</b><br/><span>🧩 재료: 막대기 + 밧줄</span><br/><span>🧪 설명: 적을 공중에 매다는 트랩.</span></div><div class="item"><b>데드폴 트랩</b><br/><span>🧩 재료: 통나무 + 막대기</span><br/><span>🧪 설명: 무거운 구조물 낙하식 함정.</span></div><div class="item"><b>불덫</b><br/><span>🧩 재료: 수액 + 천 + 막대기</span><br/><span>🧪 설명: 지나가는 적을 불태움.</span></div></div></div>
-<button id="topBtn" onclick="scrollToTop()">↑</button>
-</body>
-</html>
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
 
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="22ba84f0-5d83-8085-8160-cc6e2cae4929" class="page sans"><header><h1 class="page-title">더 포레스트 제작도감</h1><p class="page-description"></p></header><div class="page-body"><ul id="22ba84f0-5d83-80ca-b033-c9fd87f211eb" class="toggle"><li><details open=""><summary>🧪 치유 &amp; 에너지</summary><p id="22ba84f0-5d83-803a-b78f-e260fc833eb2" class=""><strong>에너지 믹스</strong>🧩 재료: 치커리 + 콘 플라워🧪 효과: 에너지 회복</p><p id="22ba84f0-5d83-8070-bd2a-f820a45b65a6" class=""><strong>에너지 믹스+</strong>🧩 재료: 치커리 + 콘 플라워 + 알로에🧪 효과: 에너지 대량 회복</p><p id="22ba84f0-5d83-80c0-a575-c464bee621fb" class=""><strong>체력 믹스</strong>🧩 재료: 마리골드 + 알로에🧪 효과: 체력 회복</p><p id="22ba84f0-5d83-80e1-a72a-c7acbc817f77" class=""><strong>체력 믹스+</strong>🧩 재료: 마리골드 + 알로에 + 콘 플라워🧪 효과: 체력 대량 회복</p></details></li></ul><ul id="22ba84f0-5d83-8064-a8d0-ea63a8f56f56" class="toggle"><li><details open=""><summary>🛡 갑옷 &amp; 의류</summary><p id="22ba84f0-5d83-802a-8cfb-cb1f759adfeb" class=""><strong>도마뱀 갑옷</strong>🧩 재료: 도마뱀 껍질🧪 효과: 기본 방어력 제공</p><p id="22ba84f0-5d83-8049-8952-c7844a7b8472" class=""><strong>스텔스 갑옷</strong>🧩 재료: 도마뱀 껍질 + 나뭇잎[15]🧪 효과: 은신 능력 향상</p><p id="22ba84f0-5d83-809a-98ed-e23e050533d8" class=""><strong>뼈 갑옷</strong>🧩 재료: 뼈[6] + 천[3]🧪 효과: 방어력 상승</p><p id="22ba84f0-5d83-80c3-bc67-ff788862e45a" class=""><strong>워름 갑옷</strong>🧩 재료: 워름 파츠[15]🧪 효과: 방어력 최고치, 돌연변이 처치 후 제작 가능</p><p id="22ba84f0-5d83-8030-ae98-f4618f0a77f4" class=""><strong>스노우부츠</strong>🧩 재료: 토끼털[3] + 밧줄[2]🧪 효과: 눈 위에서의 이동 속도 향상</p></details></li></ul><ul id="22ba84f0-5d83-8082-af53-fa16c52992e9" class="toggle"><li><details open=""><summary>🎒 가방</summary><p id="22ba84f0-5d83-804e-aa43-e790c1ab3057" class=""><strong>가죽 물통</strong>🧩 재료: 사슴 가죽[2] + 밧줄🧪 효과: 물 저장 가능</p><p id="22ba84f0-5d83-8075-9e82-cea53f2095a3" class=""><strong>돌 가방</strong>🧩 재료: 멧돼지 가죽 + 천 + 밧줄[3]🧪 효과: 돌 소지량 증가</p><p id="22ba84f0-5d83-805c-911f-f4286c6e9ca3" class=""><strong>막대기 주머니</strong>🧩 재료: 토끼털 + 밧줄[2] + 천[3]🧪 효과: 막대기 소지량 증가</p><p id="22ba84f0-5d83-80d6-8401-cf42d2ab398c" class=""><strong>주머니</strong>🧩 재료: 토끼털[2]🧪 효과: 베리류 저장 가능</p><p id="22ba84f0-5d83-8023-ba03-fdde924857b2" class=""><strong>창 가방</strong>🧩 재료: 멧돼지 가죽[2] + 사슴 가죽[2] + 천[2] + 밧줄[3]🧪 효과: 창 소지량 증가</p><p id="22ba84f0-5d83-80c5-bbda-c1d6a908d574" class=""><strong>토끼털 부츠</strong>🧩 재료: 토끼털[3] + 밧줄[2]🧪 효과: 이동 속도 소폭 증가</p><p id="22ba84f0-5d83-8054-9be6-eaed1921a5db" class=""><strong>화살통</strong>🧩 재료: 토끼털[3] + 밧줄🧪 효과: 화살 최대 소지량 증가</p></details></li></ul><ul id="22ba84f0-5d83-807a-826f-e9631d7d4b47" class="toggle"><li><details open=""><summary>⚔️ 무기</summary><ul id="22ba84f0-5d83-80ad-8396-f8bf40c922d7" class="toggle"><li><details open=""><summary>근접 무기</summary><p id="22ba84f0-5d83-8082-b117-de1c72afe215" class=""><strong>강화 창</strong>🧩 재료: 창 + 천[2] + 뼈[3]🧪 효과: 공격력 증가</p><p id="22ba84f0-5d83-80a2-b470-e3861b95a884" class=""><strong>강화 막대기</strong>🧩 재료: 막대기 + 천🧪 효과: 불 붙이기 가능</p><p id="22ba84f0-5d83-8077-a328-e17aff17d998" class=""><strong>강화 돌멩이</strong>🧩 재료: 돌 + 천🧪 효과: 불 붙이기 가능</p><p id="22ba84f0-5d83-80d3-b333-c8e33e86051b" class=""><strong>카타나</strong>🧩 재료: 협곡 동굴에서 획득🧪 효과: 빠른 공격 속도, 방어 불가</p><p id="22ba84f0-5d83-8069-9204-f6ee046a06aa" class=""><strong>몽둥이</strong>🧩 재료: 식인종 시체 또는 동굴🧪 효과: 공격력 높고 저지력 강함</p><p id="22ba84f0-5d83-808b-8695-e7002c788c2b" class=""><strong>제작 몽둥이</strong>🧩 재료: 해골 + 막대기🧪 효과: 중간 성능, 장식 가능</p><p id="22ba84f0-5d83-80c7-a2cc-e546fd819cad" class=""><strong>수리 도구</strong>🧩 재료: 막대기[2] + 돌 + 수액[10] + 천[2]🧪 효과: 건물 수리, 자원 수확</p><p id="22ba84f0-5d83-803d-8c9a-da80a3bfd5e4" class=""><strong>테니스 라켓</strong>🧩 재료: 협곡 동굴 또는 식인종 드랍🧪 효과: 공격력 낮음, 장난감 용도</p><p id="22ba84f0-5d83-80ed-a128-d4413159a8b4" class=""><strong>헤어스프레이</strong>🧩 재료: 가방, 캐리어 등에서 획득🧪 효과: 화염 공격 가능, 연료 소진 시 폐기</p><p id="22ba84f0-5d83-80cb-9045-d424ab51f977" class=""><strong>티미의 장난감</strong>🧩 재료: 장난감 부품[6]🧪 효과: 공격력 없음, 수집용</p></details></li></ul><ul id="22ba84f0-5d83-80e8-bad6-ee2fefe570ff" class="toggle"><li><details open=""><summary>원거리 무기</summary><p id="22ba84f0-5d83-803d-9d22-e0e33de031a4" class=""><strong>제작 활</strong>🧩 재료: 막대기 + 천 + 밧줄🧪 효과: 기본 활, 화살 발사 가능</p><p id="22ba84f0-5d83-8054-846b-e7037ebb8e8b" class=""><strong>현대 활</strong>🧩 재료: 협곡 동굴🧪 효과: 높은 정확도, 공격력 강력</p><p id="22ba84f0-5d83-803e-b5d7-eb47f6bee757" class=""><strong>플린트락 권총</strong>🧩 재료: 권총 부품[8] + 폭발물로 확보🧪 효과: 공격력 높지만 재장전 느림</p><p id="22ba84f0-5d83-801f-9044-f9ae73f22c4c" class=""><strong>조명탄 권총</strong>🧩 재료: 비행기 잔해🧪 효과: 적중 시 화염 발생</p><p id="22ba84f0-5d83-8083-b649-e69e97e686e7" class=""><strong>석궁</strong>🧩 재료: 해저 동굴🧪 효과: 공격력 최상, 탄환 수거 가능</p><p id="22ba84f0-5d83-80dc-b2ee-f061ec450d8b" class=""><strong>새총</strong>🧩 재료: 막대기 + 천 + 절연 테이프🧪 효과: 작은 돌 투사</p></details></li></ul><ul id="22ba84f0-5d83-8045-a462-ec2d3a570721" class="toggle"><li><details open=""><summary>투척 무기</summary><p id="22ba84f0-5d83-80e2-944d-ef27fdf62fb2" class=""><strong>화염병</strong>🧩 재료: 천 + 술🧪 효과: 착탄 시 화염 발생</p><p id="22ba84f0-5d83-801f-b7cd-c37774c60c00" class=""><strong>다이너마이트</strong>🧩 재료: 가방 등에서 획득🧪 효과: 광역 폭발, 나무 벌목 가능</p><p id="22ba84f0-5d83-803f-93ca-cba0223b5470" class=""><strong>폭발물</strong>🧩 재료: 절연테이프 + 손목시계 + 술 + 동전 + 회로판🧪 효과: 돌연변이에 강함</p><p id="22ba84f0-5d83-8081-96e4-c13774086c08" class=""><strong>점착 폭발물</strong>🧩 재료: 폭발물 + 수액🧪 효과: 표면에 달라붙음</p><p id="22ba84f0-5d83-8021-bc7b-ee88486a765c" class=""><strong>머리 폭탄</strong>🧩 재료: 폭발물 + 머리🧪 효과: 단일 고폭탄</p><p id="22ba84f0-5d83-804a-83af-d9f4b7df40cf" class=""><strong>테니스공</strong>🧩 재료: 맵 전체에서 획득🧪 효과: 주의 돌리기용, 화염 가능</p><p id="22ba84f0-5d83-8071-8441-ed015dcef71e" class=""><strong>작은 돌</strong>🧩 재료: 맵 전체에서 획득🧪 효과: 새총 탄환 또는 던지기</p></details></li></ul></details></li></ul><ul id="22ba84f0-5d83-80c1-ba8b-d83c36c2246a" class="toggle"><li><details open=""><summary>⚙️ 업그레이드</summary><p id="22ba84f0-5d83-80c6-aa1b-ff6993df9216" class=""><strong>+속도 무기</strong>🧩 재료: 무기 + 수액 + 깃털🧪 효과: 공격 속도 증가, 데미지 소폭 하락</p><p id="22ba84f0-5d83-8046-afec-e1bfa5f23f2a" class=""><strong>+데미지 무기</strong>🧩 재료: 무기 + 수액 + 술🧪 효과: 공격력 증가, 속도 하락</p><p id="22ba84f0-5d83-8047-aed3-f4a65329af4c" class=""><strong>+데미지 -속도 무기</strong>🧩 재료: 무기 + 수액 + 이빨🧪 효과: 공격력 증가, 공격 속도 하락</p><p id="22ba84f0-5d83-80c9-95f4-e8f81aa3eca4" class=""><strong>독 무기</strong>🧩 재료: 무기 + 스노우베리 or 트윈베리[4] or 독버섯🧪 효과: 적을 중독시킴</p><p id="22ba84f0-5d83-8086-82bd-cb14c011ce5d" class=""><strong>불 붙는 무기</strong>🧩 재료: 무기 + 천🧪 효과: 불 가능, 추위 해소</p><p id="22ba84f0-5d83-80c8-961d-cf010a3c7164" class=""><strong>조명 부착</strong>🧩 재료: 무기 + 손전등 + 절연 테이프🧪 효과: 야간 시야 확보</p></details></li></ul><ul id="22ba84f0-5d83-8020-a0d3-e07be554b4ab" class="toggle"><li><details open=""><summary>🏠 건축물</summary><ul id="22ba84f0-5d83-8019-bdc2-c16eb81b73c2" class="toggle"><li><details open=""><summary>기본 구조물</summary><p id="22ba84f0-5d83-80d9-aad5-e96785737330" class=""><strong>통나무 벽</strong>🧩 재료: 통나무🧪 설명: 기본적인 방어용 벽.</p><p id="22ba84f0-5d83-803d-b3bf-ee908b4f0ee5" class=""><strong>문 달린 벽</strong>🧩 재료: 통나무🧪 설명: 출입이 가능한 문이 달린 벽.</p><p id="22ba84f0-5d83-8072-babf-d10ae8b86151" class=""><strong>창문 벽</strong>🧩 재료: 통나무🧪 설명: 외부 확인이나 공격용 창이 있는 벽.</p><p id="22ba84f0-5d83-80d9-ae33-daffd7cadfaf" class=""><strong>바닥</strong>🧩 재료: 통나무🧪 설명: 건축물의 기반이 되는 바닥.</p><p id="22ba84f0-5d83-80ae-a552-e474338018a3" class=""><strong>지붕</strong>🧩 재료: 통나무🧪 설명: 집 형태를 마무리하는 지붕.</p><p id="22ba84f0-5d83-8041-b1d7-f8c0a881f361" class=""><strong>사다리</strong>🧩 재료: 막대기🧪 설명: 상층 구조로 올라갈 수 있는 구조물.</p><p id="22ba84f0-5d83-80a9-bc94-ed4c47d4fafc" class=""><strong>플랫폼</strong>🧩 재료: 통나무🧪 설명: 나무 위나 고지대 건축 시 사용.</p></details></li></ul><ul id="22ba84f0-5d83-803e-b3ed-cf13b9d90386" class="toggle"><li><details open=""><summary>쉼터</summary><p id="22ba84f0-5d83-80fd-9e42-d9816526d773" class=""><strong>땅 위 쉼터</strong>🧩 재료: 막대기 + 잎🧪 설명: 기초적인 휴식 및 저장 가능 쉼터.</p><p id="22ba84f0-5d83-80bd-b18a-e5117579be0c" class=""><strong>통나무 쉼터</strong>🧩 재료: 통나무🧪 설명: 튼튼한 나무 기반 쉼터.</p><p id="22ba84f0-5d83-80ef-811d-e37f42644c78" class=""><strong>나무 위 집</strong>🧩 재료: 통나무🧪 설명: 나무 위 안전 거처.</p><p id="22ba84f0-5d83-80d3-8ad1-f9d1bfc95f27" class=""><strong>고급 나무 위 집</strong>🧩 재료: 통나무 + 밧줄🧪 설명: 사다리와 창문이 있는 고급형.</p><p id="22ba84f0-5d83-8008-b60a-c36c3db2d47e" class=""><strong>절벽 집</strong>🧩 재료: 통나무🧪 설명: 절벽 가장자리에 설치되는 집.</p><p id="22ba84f0-5d83-805d-85c5-f72fb075478a" class=""><strong>해안가 집</strong>🧩 재료: 통나무🧪 설명: 물 위에 떠 있는 집.</p></details></li></ul><ul id="22ba84f0-5d83-80c6-9295-ca1f757920bd" class="toggle"><li><details open=""><summary>보관/생활</summary><p id="22ba84f0-5d83-8024-8bce-fa2e6ff6eb41" class=""><strong>보관대</strong>🧩 재료: 막대기🧪 설명: 기초 아이템 보관대.</p><p id="22ba84f0-5d83-80a0-9cbf-fd290e7702cb" class=""><strong>무기 보관대</strong>🧩 재료: 막대기🧪 설명: 무기를 정렬해 보관 가능.</p><p id="22ba84f0-5d83-808f-a2ca-e3116852dbb2" class=""><strong>식량 저장소</strong>🧩 재료: 막대기🧪 설명: 육류 등 음식 저장.</p><p id="22ba84f0-5d83-8068-9558-f993a7b7246e" class=""><strong>물 저장소</strong>🧩 재료: 거북이 등껍질 + 막대기🧪 설명: 빗물 채집 및 식수 확보.</p><p id="22ba84f0-5d83-8073-9193-e09c8719a32d" class=""><strong>침대</strong>🧩 재료: 막대기 + 천🧪 설명: 수면 및 저장 가능 침구.</p><p id="22ba84f0-5d83-8075-90f1-e05f6cc17c66" class=""><strong>벽난로</strong>🧩 재료: 돌🧪 설명: 난방과 조명 역할을 겸함.</p><p id="22ba84f0-5d83-80a8-8f71-dfa909fa5920" class=""><strong>벽걸이 횃불</strong>🧩 재료: 막대기 + 천🧪 설명: 벽면에 설치하는 조명.</p></details></li></ul><ul id="22ba84f0-5d83-8058-8706-f2d38767cda5" class="toggle"><li><details open=""><summary>함정/방어</summary><p id="22ba84f0-5d83-808b-9ce6-f89c83fdb77b" class=""><strong>방어용 벽</strong>🧩 재료: 통나무🧪 설명: 두터운 방어 구조물.</p><p id="22ba84f0-5d83-8076-9e5f-d0260e0626a3" class=""><strong>방어용 문</strong>🧩 재료: 통나무🧪 설명: 폐쇄가 가능한 방어용 입구.</p><p id="22ba84f0-5d83-80b4-a544-fe2431adfaed" class=""><strong>돌 트랩</strong>🧩 재료: 돌 + 막대기 + 밧줄🧪 설명: 지나는 적에게 피해.</p><p id="22ba84f0-5d83-8068-8cc0-f598e3da4753" class=""><strong>밧줄 덫</strong>🧩 재료: 막대기 + 밧줄🧪 설명: 적을 공중에 매다는 트랩.</p><p id="22ba84f0-5d83-80ef-8bca-f83a3a874671" class=""><strong>데드폴 트랩</strong>🧩 재료: 통나무 + 막대기🧪 설명: 무거운 구조물 낙하식 함정.</p><p id="22ba84f0-5d83-806c-a4ca-dba1ba76b5ea" class=""><strong>불덫</strong>🧩 재료: 수액 + 천 + 막대기🧪 설명: 지나가는 적을 불태움.</p></details></li></ul></details></li></ul><p id="22ba84f0-5d83-80fc-aaa0-d3e3abf51485" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
