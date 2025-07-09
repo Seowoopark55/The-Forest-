@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&amp;display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<title>The Forest 제작 가이드</title>
+<style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 10px; }
+        h1 { font-size: 28px; }
+        .category { background: #dde4ff; padding: 10px; border-radius: 6px; margin-bottom: 20px; }
+        .item { background: #eaffea; margin: 5px 0; padding: 10px; border-radius: 6px; }
+        .sub-category-block { margin-top: 10px; }
+        .sub-title { font-weight: bold; background: #d8f0ff; padding: 8px; border-radius: 4px; cursor: pointer; }
+        .sub-content { display: none; padding-left: 10px; margin-top: 5px; }
+        .collapsible { cursor: pointer; font-weight: bold; }
+        .content { display: none; margin-top: 5px; }
+        #topBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #555;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        #searchBox {
+            width: 80%;
+            padding: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        #controls {
+            margin-bottom: 20px;
+        }
+        .hidden { display: none !important; }
+    
+.item-description {
+    font-size: 15px;
+    color: #2a2a2a;
+    background: #eef4ff;
+    border-left: 4px solid #6aa6ff;
+    padding: 6px 12px;
+    margin-top: 5px;
+    border-radius: 6px;
+    font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+}
+
+</style>
+<script>
+        function toggle(id) {
+            var el = document.getElementById(id);
+            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+        }
+        function toggleSubCategory(id) {
+            var sub = document.getElementById(id);
+            sub.style.display = (sub.style.display === 'none') ? 'block' : 'none';
+        }
+        function expandAll() {
+            document.querySelectorAll('.content, .sub-content').forEach(e => e.style.display = 'block');
+        }
+        function collapseAll() {
+            document.querySelectorAll('.content, .sub-content').forEach(e => e.style.display = 'none');
+        }
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function searchItems() {
+            const keyword = document.getElementById('searchBox').value.toLowerCase();
+            const allItems = document.querySelectorAll('.item');
+            const allContents = document.querySelectorAll('.content, .sub-content');
+            allContents.forEach(e => e.style.display = 'none');
+            allItems.forEach(item => {
+                if (item.textContent.toLowerCase().includes(keyword)) {
+                    item.classList.remove('hidden');
+                    let parent = item.parentElement;
+                    while (parent) {
+                        if (parent.classList.contains('content') || parent.classList.contains('sub-content')) {
+                            parent.style.display = 'block';
+                        }
+                        parent = parent.parentElement;
+                    }
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            if (keyword.trim() === '') {
+                allItems.forEach(i => i.classList.remove('hidden'));
+                allContents.forEach(e => e.style.display = 'none');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>📘 The Forest 제작 가이드</h1>
+<div id="controls">
+<input id="searchBox" oninput="searchItems()" placeholder="아이템 검색..." type="text"/>
+<button onclick="expandAll()">모두 펼치기</button>
+<button onclick="collapseAll()">모두 접기</button>
+</div>
+<div class="category">
+<div class="collapsible" onclick="toggle('heal')">🧪 치유 &amp; 에너지</div>
+<div class="content" id="heal">
+<div class="item">
+<b>에너지 믹스</b><br/>
+<span>🧩 재료: 치커리 + 콘 플라워</span><br/>
+<span>🧪 효과: 에너지 회복</span>
+</div>
+<div class="item">
+<b>에너지 믹스+</b><br/>
+<span>🧩 재료: 치커리 + 콘 플라워 + 알로에</span><br/>
+<span>🧪 효과: 에너지 대량 회복</span>
+</div>
+<div class="item">
+<b>체력 믹스</b><br/>
+<span>🧩 재료: 마리골드 + 알로에</span><br/>
+<span>🧪 효과: 체력 회복</span>
+</div>
+<div class="item">
+<b>체력 믹스+</b><br/>
+<span>🧩 재료: 마리골드 + 알로에 + 콘 플라워</span><br/>
+<span>🧪 효과: 체력 대량 회복</span>
+</div>
+</div>
+</div>
+<div class="category">
+<div class="collapsible" onclick="toggle('armor')">🛡 갑옷 &amp; 의류</div>
+<div class="content" id="armor">
+<div class="item">
+<b>도마뱀 갑옷</b><br/>
+<span>🧩 재료: 도마뱀 껍질</span><br/>
+<span>🧪 효과: 기본 방어력 제공</span>
+</div>
+<div class="item">
+<b>스텔스 갑옷</b><br/>
+<span>🧩 재료: 도마뱀 껍질 + 나뭇잎[15]</span><br/>
+<span>🧪 효과: 은신 능력 향상</span>
+</div>
+<div class="item">
+<b>뼈 갑옷</b><br/>
+<span>🧩 재료: 뼈[6] + 천[3]</span><br/>
+<span>🧪 효과: 방어력 상승</span>
+</div>
+<div class="item">
+<b>워름 갑옷</b><br/>
+<span>🧩 재료: 워름 파츠[15]</span><br/>
+<span>🧪 효과: 방어력 최고치, 돌연변이 처치 후 제작 가능</span>
+</div>
+<div class="item">
+<b>스노우부츠</b><br/>
+<span>🧩 재료: 토끼털[3] + 밧줄[2]</span><br/>
+<span>🧪 효과: 눈 위에서의 이동 속도 향상</span>
+</div>
+</div>
+</div>
+<div class="category">
+<div class="collapsible" onclick="toggle('bag')">🎒 가방</div>
+<div class="content" id="bag">
+<div class="item">
+<b>가죽 물통</b><br/>
+<span>🧩 재료: 사슴 가죽[2] + 밧줄</span><br/>
+<span>🧪 효과: 물 저장 가능</span>
+</div>
+<div class="item">
+<b>돌 가방</b><br/>
+<span>🧩 재료: 멧돼지 가죽 + 천 + 밧줄[3]</span><br/>
+<span>🧪 효과: 돌 소지량 증가</span>
+</div>
+<div class="item">
+<b>막대기 주머니</b><br/>
+<span>🧩 재료: 토끼털 + 밧줄[2] + 천[3]</span><br/>
+<span>🧪 효과: 막대기 소지량 증가</span>
+</div>
+<div class="item">
+<b>주머니</b><br/>
+<span>🧩 재료: 토끼털[2]</span><br/>
+<span>🧪 효과: 베리류 저장 가능</span>
+</div>
+<div class="item">
+<b>창 가방</b><br/>
+<span>🧩 재료: 멧돼지 가죽[2] + 사슴 가죽[2] + 천[2] + 밧줄[3]</span><br/>
+<span>🧪 효과: 창 소지량 증가</span>
+</div>
+<div class="item">
+<b>토끼털 부츠</b><br/>
+<span>🧩 재료: 토끼털[3] + 밧줄[2]</span><br/>
+<span>🧪 효과: 이동 속도 소폭 증가</span>
+</div>
+<div class="item">
+<b>화살통</b><br/>
+<span>🧩 재료: 토끼털[3] + 밧줄</span><br/>
+<span>🧪 효과: 화살 최대 소지량 증가</span>
+</div>
+</div>
+</div>
+<div class="category">
+<div class="collapsible" onclick="toggle('weapon')">⚔️ 무기</div>
+<div class="content" id="weapon">
+<div class="sub-category-block">
+<div class="sub-title" onclick="toggleSubCategory('melee')">▶ 근접 무기</div>
+<div class="sub-content" id="melee">
+<div class="item">
+<b>강화 창</b><br/>
+<span>🧩 재료: 창 + 천[2] + 뼈[3]</span><br/>
+<span>🧪 효과: 공격력 증가</span>
+</div>
+<div class="item">
+<b>강화 막대기</b><br/>
+<span>🧩 재료: 막대기 + 천</span><br/>
+<span>🧪 효과: 불 붙이기 가능</span>
+</div>
+<div class="item">
+<b>강화 돌멩이</b><br/>
+<span>🧩 재료: 돌 + 천</span><br/>
+<span>🧪 효과: 불 붙이기 가능</span>
+</div>
+<div class="item">
+<b>카타나</b><br/>
+<span>🧩 재료: 협곡 동굴에서 획득</span><br/>
+<span>🧪 효과: 빠른 공격 속도, 방어 불가</span>
+</div>
+<div class="item">
+<b>몽둥이</b><br/>
+<span>🧩 재료: 식인종 시체 또는 동굴</span><br/>
+<span>🧪 효과: 공격력 높고 저지력 강함</span>
+</div>
+<div class="item">
+<b>제작 몽둥이</b><br/>
+<span>🧩 재료: 해골 + 막대기</span><br/>
+<span>🧪 효과: 중간 성능, 장식 가능</span>
+</div>
+<div class="item">
+<b>수리 도구</b><br/>
+<span>🧩 재료: 막대기[2] + 돌 + 수액[10] + 천[2]</span><br/>
+<span>🧪 효과: 건물 수리, 자원 수확</span>
+</div>
+<div class="item">
+<b>테니스 라켓</b><br/>
+<span>🧩 재료: 협곡 동굴 또는 식인종 드랍</span><br/>
+<span>🧪 효과: 공격력 낮음, 장난감 용도</span>
+</div>
+<div class="item">
+<b>헤어스프레이</b><br/>
+<span>🧩 재료: 가방, 캐리어 등에서 획득</span><br/>
+<span>🧪 효과: 화염 공격 가능, 연료 소진 시 폐기</span>
+</div>
+<div class="item">
+<b>티미의 장난감</b><br/>
+<span>🧩 재료: 장난감 부품[6]</span><br/>
+<span>🧪 효과: 공격력 없음, 수집용</span>
+</div>
+</div>
+</div>
+<div class="sub-category-block">
+<div class="sub-title" onclick="toggleSubCategory('ranged')">▶ 원거리 무기</div>
+<div class="sub-content" id="ranged">
+<div class="item">
+<b>제작 활</b><br/>
+<span>🧩 재료: 막대기 + 천 + 밧줄</span><br/>
+<span>🧪 효과: 기본 활, 화살 발사 가능</span>
+</div>
+<div class="item">
+<b>현대 활</b><br/>
+<span>🧩 재료: 협곡 동굴</span><br/>
+<span>🧪 효과: 높은 정확도, 공격력 강력</span>
+</div>
+<div class="item">
+<b>플린트락 권총</b><br/>
+<span>🧩 재료: 권총 부품[8] + 폭발물로 확보</span><br/>
+<span>🧪 효과: 공격력 높지만 재장전 느림</span>
+</div>
+<div class="item">
+<b>조명탄 권총</b><br/>
+<span>🧩 재료: 비행기 잔해</span><br/>
+<span>🧪 효과: 적중 시 화염 발생</span>
+</div>
+<div class="item">
+<b>석궁</b><br/>
+<span>🧩 재료: 해저 동굴</span><br/>
+<span>🧪 효과: 공격력 최상, 탄환 수거 가능</span>
+</div>
+<div class="item">
+<b>새총</b><br/>
+<span>🧩 재료: 막대기 + 천 + 절연 테이프</span><br/>
+<span>🧪 효과: 작은 돌 투사</span>
+</div>
+</div>
+</div>
+<div class="sub-category-block">
+<div class="sub-title" onclick="toggleSubCategory('arrows')">▶ 화살</div>
+<div class="sub-content" id="arrows">
+<div class="item">
+<b>화살 [x5]</b><br/>
+<span>🧩 재료: 막대기 + 깃털[5]</span><br/>
+<span>🧪 효과: 기본 투사체</span>
+</div>
+<div class="item">
+<b>뼈 화살 [x5]</b><br/>
+<span>🧩 재료: 막대기 + 깃털[5] + 뼈[5]</span><br/>
+<span>🧪 효과: 데미지 증가</span>
+</div>
+<div class="item">
+<b>불화살 [x5]</b><br/>
+<span>🧩 재료: 화살[5] + 천 + 술</span><br/>
+<span>🧪 효과: 적중 시 화염 피해</span>
+</div>
+<div class="item">
+<b>독화살 [x5]</b><br/>
+<span>🧩 재료: 화살[5] + 트윈베리 or 스노우베리[4] + 광대버섯 or 화경버섯</span><br/>
+<span>🧪 효과: 적을 중독시킴</span>
+</div>
+</div>
+</div>
+<div class="sub-category-block">
+<div class="sub-title" onclick="toggleSubCategory('throwing')">▶ 투척 무기</div>
+<div class="sub-content" id="throwing">
+<div class="item">
+<b>화염병</b><br/>
+<span>🧩 재료: 천 + 술</span><br/>
+<span>🧪 효과: 착탄 시 화염 발생</span>
+</div>
+<div class="item">
+<b>다이너마이트</b><br/>
+<span>🧩 재료: 가방 등에서 획득</span><br/>
+<span>🧪 효과: 광역 폭발, 나무 벌목 가능</span>
+</div>
+<div class="item">
+<b>폭발물</b><br/>
+<span>🧩 재료: 절연테이프 + 손목시계 + 술 + 동전 + 회로판</span><br/>
+<span>🧪 효과: 돌연변이에 강함</span>
+</div>
+<div class="item">
+<b>점착 폭발물</b><br/>
+<span>🧩 재료: 폭발물 + 수액</span><br/>
+<span>🧪 효과: 표면에 달라붙음</span>
+</div>
+<div class="item">
+<b>머리 폭탄</b><br/>
+<span>🧩 재료: 폭발물 + 머리</span><br/>
+<span>🧪 효과: 단일 고폭탄</span>
+</div>
+<div class="item">
+<b>테니스공</b><br/>
+<span>🧩 재료: 맵 전체에서 획득</span><br/>
+<span>🧪 효과: 주의 돌리기용, 화염 가능</span>
+</div>
+<div class="item">
+<b>작은 돌</b><br/>
+<span>🧩 재료: 맵 전체에서 획득</span><br/>
+<span>🧪 효과: 새총 탄환 또는 던지기</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="category">
+<div class="collapsible" onclick="toggle('upgrade')">⚙️ 업그레이드</div>
+<div class="content" id="upgrade">
+<div class="item">
+<b>+속도 무기</b><br/>
+<span>🧩 재료: 무기 + 수액 + 깃털</span><br/>
+<span>🧪 효과: 공격 속도 증가, 데미지 소폭 하락</span>
+</div>
+<div class="item">
+<b>+데미지 무기</b><br/>
+<span>🧩 재료: 무기 + 수액 + 술</span><br/>
+<span>🧪 효과: 공격력 증가, 속도 하락</span>
+</div>
+<div class="item">
+<b>+데미지 -속도 무기</b><br/>
+<span>🧩 재료: 무기 + 수액 + 이빨</span><br/>
+<span>🧪 효과: 공격력 증가, 공격 속도 하락</span>
+</div>
+<div class="item">
+<b>독 무기</b><br/>
+<span>🧩 재료: 무기 + 스노우베리 or 트윈베리[4] or 독버섯</span><br/>
+<span>🧪 효과: 적을 중독시킴</span>
+</div>
+<div class="item">
+<b>불 붙는 무기</b><br/>
+<span>🧩 재료: 무기 + 천</span><br/>
+<span>🧪 효과: 불 가능, 추위 해소</span>
+</div>
+<div class="item">
+<b>조명 부착</b><br/>
+<span>🧩 재료: 무기 + 손전등 + 절연 테이프</span><br/>
+<span>🧪 효과: 야간 시야 확보</span>
+</div>
+</div>
+</div><div class="category"><div class="collapsible" onclick="toggle('기본 구조물')">🏠 건축물 - 기본 구조물</div><div class="content" id="기본 구조물"><div class="item"><b>통나무 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 기본적인 방어용 벽.</span></div><div class="item"><b>문 달린 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 출입이 가능한 문이 달린 벽.</span></div><div class="item"><b>창문 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 외부 확인이나 공격용 창이 있는 벽.</span></div><div class="item"><b>바닥</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 건축물의 기반이 되는 바닥.</span></div><div class="item"><b>지붕</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 집 형태를 마무리하는 지붕.</span></div><div class="item"><b>사다리</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 상층 구조로 올라갈 수 있는 구조물.</span></div><div class="item"><b>플랫폼</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 나무 위나 고지대 건축 시 사용.</span></div></div></div><div class="category"><div class="collapsible" onclick="toggle('쉼터')">🏠 건축물 - 쉼터</div><div class="content" id="쉼터"><div class="item"><b>땅 위 쉼터</b><br/><span>🧩 재료: 막대기 + 잎</span><br/><span>🧪 설명: 기초적인 휴식 및 저장 가능 쉼터.</span></div><div class="item"><b>통나무 쉼터</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 튼튼한 나무 기반 쉼터.</span></div><div class="item"><b>나무 위 집</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 나무 위 안전 거처.</span></div><div class="item"><b>고급 나무 위 집</b><br/><span>🧩 재료: 통나무 + 밧줄</span><br/><span>🧪 설명: 사다리와 창문이 있는 고급형.</span></div><div class="item"><b>절벽 집</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 절벽 가장자리에 설치되는 집.</span></div><div class="item"><b>해안가 집</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 물 위에 떠 있는 집.</span></div></div></div><div class="category"><div class="collapsible" onclick="toggle('보관/생활')">🏠 건축물 - 보관/생활</div><div class="content" id="보관/생활"><div class="item"><b>보관대</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 기초 아이템 보관대.</span></div><div class="item"><b>무기 보관대</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 무기를 정렬해 보관 가능.</span></div><div class="item"><b>식량 저장소</b><br/><span>🧩 재료: 막대기</span><br/><span>🧪 설명: 육류 등 음식 저장.</span></div><div class="item"><b>물 저장소</b><br/><span>🧩 재료: 거북이 등껍질 + 막대기</span><br/><span>🧪 설명: 빗물 채집 및 식수 확보.</span></div><div class="item"><b>침대</b><br/><span>🧩 재료: 막대기 + 천</span><br/><span>🧪 설명: 수면 및 저장 가능 침구.</span></div><div class="item"><b>벽난로</b><br/><span>🧩 재료: 돌</span><br/><span>🧪 설명: 난방과 조명 역할을 겸함.</span></div><div class="item"><b>벽걸이 횃불</b><br/><span>🧩 재료: 막대기 + 천</span><br/><span>🧪 설명: 벽면에 설치하는 조명.</span></div></div></div><div class="category"><div class="collapsible" onclick="toggle('함정/방어')">🏠 건축물 - 함정/방어</div><div class="content" id="함정/방어"><div class="item"><b>방어용 벽</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 두터운 방어 구조물.</span></div><div class="item"><b>방어용 문</b><br/><span>🧩 재료: 통나무</span><br/><span>🧪 설명: 폐쇄가 가능한 방어용 입구.</span></div><div class="item"><b>돌 트랩</b><br/><span>🧩 재료: 돌 + 막대기 + 밧줄</span><br/><span>🧪 설명: 지나는 적에게 피해.</span></div><div class="item"><b>밧줄 덫</b><br/><span>🧩 재료: 막대기 + 밧줄</span><br/><span>🧪 설명: 적을 공중에 매다는 트랩.</span></div><div class="item"><b>데드폴 트랩</b><br/><span>🧩 재료: 통나무 + 막대기</span><br/><span>🧪 설명: 무거운 구조물 낙하식 함정.</span></div><div class="item"><b>불덫</b><br/><span>🧩 재료: 수액 + 천 + 막대기</span><br/><span>🧪 설명: 지나가는 적을 불태움.</span></div></div></div>
+<button id="topBtn" onclick="scrollToTop()">↑</button>
+</body>
+</html>
+
